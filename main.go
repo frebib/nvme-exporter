@@ -7,7 +7,6 @@ import (
 	"log"
 	"net/http"
 	"os/exec"
-	"os/user"
 
 	kitlog "github.com/go-kit/log"
 	"github.com/prometheus/client_golang/prometheus"
@@ -280,17 +279,8 @@ func main() {
 	webConfigFile := flag.String("web.config.file", "", "Path to web config file")
 	flag.Parse()
 
-	// check user
-	currentUser, err := user.Current()
-	if err != nil {
-		log.Fatalf("Error getting current user  %s\n", err)
-	}
-	if currentUser.Username != "root" {
-		log.Fatalln("Error: you must be root to use nvme-cli")
-	}
-
 	// check for nvme-cli executable
-	_, err = exec.LookPath("nvme")
+	_, err := exec.LookPath("nvme")
 	if err != nil {
 		log.Fatalf("Cannot find nvme command in path: %s\n", err)
 	}
